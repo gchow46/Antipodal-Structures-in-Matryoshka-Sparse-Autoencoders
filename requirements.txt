@@ -1,0 +1,28 @@
+# Requirements for 4-job SAE analysis pipeline
+# Core ML libraries
+transformers
+numpy==1.26.4 # Keep numpy pinned below 2.0 for compatibility
+pyarrow==14.0.1 # Pin pyarrow to avoid build errors
+torch==2.1.2
+python==3.11
+
+# Data handling
+pandas
+datasets==3.6.0  # installed with --no-deps, pyarrow==14.0.1 separately maintained
+accelerate==0.20.3
+huggingface-hub
+
+# SAE analysis
+sae-lens==6.5.1
+umap
+argparse
+# Statistical analysis
+scikit-learn==1.7.1
+scipy==1.16.1
+
+# Visualization
+matplotlib==3.10.5
+seaborn==0.13.2
+
+# Utilities
+tqdm==4.67.1
