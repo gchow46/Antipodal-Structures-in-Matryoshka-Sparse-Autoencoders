@@ -47,7 +47,7 @@ def compute_antipodality_scores(
         E, D = normalize_weights(W_enc, W_dec, indices)
 
         # Step 2: Compute blocked pair scores
-        scores, partners, computation_metadata = blocked_pair_scores(E, D, top_k, block_size, antipodal_only)
+        scores, partners = blocked_pair_scores(E, D, top_k, block_size, antipodal_only)
 
         # Step 3: Validate scores and compute statistics
         summary_stats = validate_scores(scores)
@@ -240,7 +240,7 @@ def find_top_pairs(
     # Create pairs and deduplicate
     pairs_dict = {}
 
-    for i, (feat_idx, score, partner_pos) in enumerate(zip(valid_indices, valid_scores, valid_partners)):
+    for feat_idx, score, partner_pos in zip(valid_indices, valid_scores, valid_partners):
         partner_idx = indices[partner_pos]
 
         # Create canonical pair key

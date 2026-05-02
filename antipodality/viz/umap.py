@@ -105,6 +105,28 @@ def route_pairs_on_embedding(embedding: np.ndarray, indices: np.ndarray, pairs: 
     return line_segments
 
 
+def _plot_segment_panel(ax, embedding, segments, title):
+    ax.scatter(embedding[:, 0], embedding[:, 1], c=BACKGROUND_COLOR, s=15, alpha=0.4, label='All Features')
+    within_plotted = False
+    cross_plotted = False
+    for segment in segments:
+        color = segment['color']
+        kwargs = dict(color=color, alpha=segment['alpha'], linewidth=segment['linewidth'])
+        if color == WITHIN_LEVEL_COLOR and not within_plotted:
+            ax.plot(segment['x'], segment['y'], label='Within-level pairs', **kwargs)
+            within_plotted = True
+        elif color == CROSS_LEVEL_COLOR and not cross_plotted:
+            ax.plot(segment['x'], segment['y'], label='Cross-level pairs', **kwargs)
+            cross_plotted = True
+        else:
+            ax.plot(segment['x'], segment['y'], **kwargs)
+    ax.set_title(title, fontweight='bold')
+    ax.legend(fontsize=8)
+    ax.set_xlabel('UMAP 1', fontweight='bold')
+    ax.set_ylabel('UMAP 2', fontweight='bold')
+    ax.grid(True, alpha=0.3)
+
+
 def plot_umap_analysis(payload: Dict, out_path: str) -> None:
     """
     make UMAP analysis figure.
@@ -167,35 +189,8 @@ def plot_umap_analysis(payload: Dict, out_path: str) -> None:
     axes[2].grid(True, alpha=0.3)
 
     # 4. Encoder UMAP with antipodal pair routing
-    # Show all features as background
-    axes[3].scatter(enc_embedding[:, 0], enc_embedding[:, 1],
-                   c=BACKGROUND_COLOR, s=15, alpha=0.4, label='All Features')
-
-    # Plot line segments
-    within_plotted = False
-    cross_plotted = False
-    for segment in enc_segments:
-        color = segment['color']
-        if color == WITHIN_LEVEL_COLOR and not within_plotted:
-            axes[3].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'],
-                       label='Within-level pairs')
-            within_plotted = True
-        elif color == CROSS_LEVEL_COLOR and not cross_plotted:
-            axes[3].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'],
-                       label='Cross-level pairs')
-            cross_plotted = True
-        else:
-            axes[3].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'])
-
-    axes[3].set_title(f'Encoder UMAP - Confirmed Pairs: {len(enc_segments)} (>=0.8)', fontweight='bold')
-    axes[3].legend(fontsize=8)
-
-    axes[3].set_xlabel('UMAP 1', fontweight='bold')
-    axes[3].set_ylabel('UMAP 2', fontweight='bold')
-    axes[3].grid(True, alpha=0.3)
+    _plot_segment_panel(axes[3], enc_embedding, enc_segments,
+                        f'Encoder UMAP - Confirmed Pairs: {len(enc_segments)} (>=0.8)')
 
     # 5. Decoder UMAP colored by Matryoshka level
     axes[4].scatter(dec_embedding[:, 0], dec_embedding[:, 1], c=colors_by_level,
@@ -227,35 +222,8 @@ def plot_umap_analysis(payload: Dict, out_path: str) -> None:
     axes[6].grid(True, alpha=0.3)
 
     # 8. Decoder UMAP with antipodal pair routing
-    # Show all features as background
-    axes[7].scatter(dec_embedding[:, 0], dec_embedding[:, 1],
-                   c=BACKGROUND_COLOR, s=15, alpha=0.4, label='All Features')
-
-    # Plot line segments
-    within_plotted = False
-    cross_plotted = False
-    for segment in dec_segments:
-        color = segment['color']
-        if color == WITHIN_LEVEL_COLOR and not within_plotted:
-            axes[7].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'],
-                       label='Within-level pairs')
-            within_plotted = True
-        elif color == CROSS_LEVEL_COLOR and not cross_plotted:
-            axes[7].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'],
-                       label='Cross-level pairs')
-            cross_plotted = True
-        else:
-            axes[7].plot(segment['x'], segment['y'], color=color,
-                       alpha=segment['alpha'], linewidth=segment['linewidth'])
-
-    axes[7].set_title(f'Decoder UMAP - Confirmed Pairs: {len(dec_segments)} (>=0.8)', fontweight='bold')
-    axes[7].legend(fontsize=8)
-
-    axes[7].set_xlabel('UMAP 1', fontweight='bold')
-    axes[7].set_ylabel('UMAP 2', fontweight='bold')
-    axes[7].grid(True, alpha=0.3)
+    _plot_segment_panel(axes[7], dec_embedding, dec_segments,
+                        f'Decoder UMAP - Confirmed Pairs: {len(dec_segments)} (>=0.8)')
 
     plt.tight_layout()
     plt.savefig(out_path, dpi=300, bbox_inches="tight", pad_inches=0.3)

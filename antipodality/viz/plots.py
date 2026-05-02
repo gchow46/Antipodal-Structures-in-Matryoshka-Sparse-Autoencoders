@@ -300,6 +300,14 @@ def plot_enc_dec_scatter(payload: EncDecScatterPayload, out_path: str) -> None:
     plt.close()
 
 
+def _label_bars(ax, bars, scores):
+    for bar, score in zip(bars, scores):
+        ax.text(bar.get_x() + bar.get_width() / 2., bar.get_height() + 0.01,
+                f'{score:.3f}', ha='center', va='bottom', fontsize=10)
+    lo, hi = ax.get_ylim()
+    ax.set_ylim(lo, hi * 1.1)
+
+
 def plot_within_cross(payload: WithinCrossPayload, out_path: str) -> None:
     """
     create within vs cross-level comparison bar charts from payload.
@@ -326,15 +334,7 @@ def plot_within_cross(payload: WithinCrossPayload, out_path: str) -> None:
     ax1.set_xticklabels(within_labels, rotation=0, ha='center')
     ax1.grid(True, alpha=0.3, axis='y')
 
-    # Add value labels on bars
-    for bar, score in zip(bars1, within_scores):
-        height = bar.get_height()
-        ax1.text(bar.get_x() + bar.get_width()/2., height + 0.01,
-                f'{score:.3f}', ha='center', va='bottom', fontsize=10)
-
-    # Fix y-axis padding to prevent value labels from hitting grid lines
-    current_ylim = ax1.get_ylim()
-    ax1.set_ylim(current_ylim[0], current_ylim[1] * 1.1)
+    _label_bars(ax1, bars1, within_scores)
 
     # Add legend for Matryoshka levels
     level_handles = []
@@ -373,15 +373,7 @@ def plot_within_cross(payload: WithinCrossPayload, out_path: str) -> None:
     ax2.set_xticklabels(cross_labels, rotation=0, ha='center')
     ax2.grid(True, alpha=0.3, axis='y')
 
-    # Add value labels on bars
-    for bar, score in zip(bars2, cross_scores):
-        height = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2., height + 0.01,
-                f'{score:.3f}', ha='center', va='bottom', fontsize=10)
-
-    # Fix y-axis padding
-    current_ylim = ax2.get_ylim()
-    ax2.set_ylim(current_ylim[0], current_ylim[1] * 1.1)
+    _label_bars(ax2, bars2, cross_scores)
 
     # Add legend for transition types
     transition_handles = []

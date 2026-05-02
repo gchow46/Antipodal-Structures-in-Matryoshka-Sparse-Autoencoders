@@ -1,7 +1,7 @@
 # antipodality/viz/payloads.py
 
 from __future__ import annotations
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional
 import numpy as np
 
 from antipodality.types import EncDecScatterPayload, WithinCrossPayload
@@ -11,8 +11,6 @@ from antipodality import analysis
 from antipodality.similarity import cosine_matrix
 from antipodality.clustering import group_then_cluster_order
 from antipodality.viz import umap as umap_viz
-from antipodality.utils import assign_levels
-from antipodality.constants import LEVEL_COLORS, MATRYOSHKA_LEVELS
 import random
 
 

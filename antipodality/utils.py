@@ -60,10 +60,6 @@ class MatryoshkaUtils:
                 return level
         return None
 
-    @staticmethod
-    def coerce_level(level: Optional[int]) -> int:
-        """return given level or the last level if none"""
-        return level if level is not None else MATRYOSHKA_LEVELS[-1]
 
 
 def assign_levels(indices: np.ndarray) -> np.ndarray:

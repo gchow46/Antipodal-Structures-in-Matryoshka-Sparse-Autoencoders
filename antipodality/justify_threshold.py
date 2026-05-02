@@ -87,9 +87,9 @@ def main():
             print()
 
         except FileNotFoundError:
-            print()
+            print(f"  File not found: {npz_file}, skipping.")
         except Exception as e:
-            print()
+            print(f"  Error processing layer {layer}: {e}")
 
     # Summary analysis
     if results:
@@ -101,7 +101,7 @@ def main():
         print(f"- {avg_percent_05:.2f}% of features per layer")
 
         print("Cross-layer consistency:")
-        for layer in sorted(results.keys()):
+        for layer in results:
             r = results[layer]
             print(f"Layer {layer:2d}: {r['percent_05']:5.2f}% dense features "
                   f"(mean density: {r['mean_density']:.4f})")
