@@ -1,9 +1,4 @@
-"""
-Type definitions for antipodality analysis.
-
-This module contains dataclass definitions for payload objects used in the
-functional core, imperative shell pattern for visualization generation.
-"""
+"""Data shared between analysis and plotting functions."""
 
 from dataclasses import dataclass
 import numpy as np

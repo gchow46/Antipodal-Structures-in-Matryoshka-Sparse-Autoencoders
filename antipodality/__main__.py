@@ -1,6 +1,4 @@
-"""
-Enable running the CLI via python -m antipodality
-"""
+"""Run the CLI with python -m antipodality."""
 
 from .cli import main
 
