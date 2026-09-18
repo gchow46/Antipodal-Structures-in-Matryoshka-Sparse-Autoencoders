@@ -1,9 +1,4 @@
-"""
-Constants for Matryoshka SAE hierarchy analysis.
-
-This module contains the core constants used throughout the antipodality analysis,
-including the Matryoshka level definitions, ranges, and visualization colors.
-"""
+"""Hierarchy ranges, plotting colors, and the default density threshold."""
 
 # Matryoshka hierarchy constants
 MATRYOSHKA_LEVELS = [128, 512, 2048, 8192, 32768]
